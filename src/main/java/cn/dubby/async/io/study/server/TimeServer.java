@@ -1,9 +1,8 @@
 package cn.dubby.async.io.study.server;
 
-import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.nio.channels.AsynchronousServerSocketChannel;
-import java.nio.channels.CompletionHandler;
+import java.util.concurrent.CountDownLatch;
 
 /**
  * @author dubby
@@ -16,8 +15,10 @@ public class TimeServer {
         try {
             AsynchronousServerSocketChannel asynchronousServerSocketChannel = AsynchronousServerSocketChannel.open();
             asynchronousServerSocketChannel.bind(new InetSocketAddress(port));
-            asynchronousServerSocketChannel.accept(null, new ReadCompletionHandler());
-        } catch (IOException e) {
+            asynchronousServerSocketChannel.accept(asynchronousServerSocketChannel, new AcceptCompletionHandler());
+
+            new CountDownLatch(1).await();
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
