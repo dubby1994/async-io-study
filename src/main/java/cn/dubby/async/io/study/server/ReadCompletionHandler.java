@@ -20,10 +20,10 @@ public class ReadCompletionHandler implements CompletionHandler<Integer, ByteBuf
     }
 
     @Override
-    public void completed(Integer result, ByteBuffer attachment) {
-        attachment.flip();
-        byte[] body = new byte[attachment.remaining()];
-        attachment.get(body);
+    public void completed(Integer result, ByteBuffer byteBuffer) {
+        byteBuffer.flip();
+        byte[] body = new byte[byteBuffer.remaining()];
+        byteBuffer.get(body);
         String request = new String(body, Charset.defaultCharset());
         logger.info("request {}", request);
         String currentTime = new Date().toString();
@@ -32,7 +32,7 @@ public class ReadCompletionHandler implements CompletionHandler<Integer, ByteBuf
 
     @Override
     public void failed(Throwable exc, ByteBuffer attachment) {
-        logger.error("ReadCompletionHandler failed");
+        logger.error("read failed");
     }
 
     private void doWrite(String data) {
@@ -41,18 +41,6 @@ public class ReadCompletionHandler implements CompletionHandler<Integer, ByteBuf
         byteBuffer.put(dataBytes);
         byteBuffer.flip();
 
-        channel.write(byteBuffer, byteBuffer, new CompletionHandler<Integer, ByteBuffer>() {
-            @Override
-            public void completed(Integer result, ByteBuffer attachment) {
-                if (attachment.hasRemaining()) {
-                    channel.write(attachment, attachment, this);
-                }
-            }
-
-            @Override
-            public void failed(Throwable exc, ByteBuffer attachment) {
-                logger.error("doWrite failed");
-            }
-        });
+        channel.write(byteBuffer, byteBuffer, new WriteCompletionHandler(channel));
     }
 }

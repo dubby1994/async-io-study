@@ -22,6 +22,6 @@ public class AcceptCompletionHandler implements CompletionHandler<AsynchronousSo
 
     @Override
     public void failed(Throwable exc, AsynchronousServerSocketChannel attachment) {
-        logger.error("AcceptCompletionHandler accept failed");
+        exc.fillInStackTrace();
     }
 }
