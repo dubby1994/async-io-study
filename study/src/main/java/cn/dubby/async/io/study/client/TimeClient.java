@@ -65,7 +65,7 @@ public class TimeClient {
                         }
                     });
 
-            new CountDownLatch(1).await();
+            Thread.sleep(100);
         } catch (Exception e) {
             e.printStackTrace();
         }
