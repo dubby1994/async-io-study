@@ -11,7 +11,7 @@
     <modules>
         <module>server</module>
         <module>client</module>
-        <module>study</module>
+        <module>time-demo</module>
     </modules>
 
     <dependencies>
