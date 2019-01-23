@@ -33,7 +33,7 @@ public class AcceptCompletionHandler implements CompletionHandler<AsynchronousSo
         //继续accept下一个连接
         serverSocketChannel.accept(serverSocketChannel, this);
 
-        ByteBuffer buffer = ByteBuffer.allocate(4);
+        ByteBuffer buffer = ByteBuffer.allocate(1024);
         result.read(buffer, buffer, new ReadCompletionHandler(businessThreadPool, result));
     }
 

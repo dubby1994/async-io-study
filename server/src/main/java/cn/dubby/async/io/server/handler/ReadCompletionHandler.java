@@ -95,7 +95,7 @@ public class ReadCompletionHandler implements CompletionHandler<Integer, ByteBuf
 
     private void doWrite(String data) {
         logger.info("request {}", data);
-        byte[] dataBytes = data.getBytes(Charset.defaultCharset());
+        byte[] dataBytes = ("result:" + data + "\n").getBytes(Charset.defaultCharset());
         ByteBuffer byteBuffer = ByteBuffer.allocate(dataBytes.length);
         byteBuffer.put(dataBytes);
         byteBuffer.flip();
