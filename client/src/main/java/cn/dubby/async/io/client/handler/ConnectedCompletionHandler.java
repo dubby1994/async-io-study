@@ -10,6 +10,8 @@ import java.nio.channels.AsynchronousSocketChannel;
 import java.nio.channels.CompletionHandler;
 import java.util.Arrays;
 import java.util.List;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 
 /**
  * @author dubby
@@ -24,18 +26,20 @@ public class ConnectedCompletionHandler implements CompletionHandler<Void, Async
         ByteBuffer readBuffer = ByteBuffer.allocate(1024);
         channel.read(readBuffer, readBuffer, new ReadCompletionHandler(channel));
 
-        List<String> requestList = Arrays.asList("123", "hello", "dubby", "xyz", "yangzheng");
+        Executors.newScheduledThreadPool(1).scheduleAtFixedRate(() -> {
+            List<String> requestList = Arrays.asList("hello", "dubby");
 
-        ByteOutputStream byteOutputStream = new ByteOutputStream(1024);
-        for (String s : requestList) {
-            byteOutputStream.write(s.getBytes(MessageConstant.DefaultCharset));
-            byteOutputStream.write(MessageConstant.Separator);
-        }
+            ByteOutputStream byteOutputStream = new ByteOutputStream(1024);
+            for (String s : requestList) {
+                byteOutputStream.write(s.getBytes(MessageConstant.DefaultCharset));
+                byteOutputStream.write(MessageConstant.Separator);
+            }
 
-        ByteBuffer writeBuffer = ByteBuffer.allocate(byteOutputStream.getCount());
-        writeBuffer.put(byteOutputStream.getBytes(), 0, byteOutputStream.getCount());
-        writeBuffer.flip();
-        channel.write(writeBuffer, writeBuffer, new WriteCompletionHandler(channel));
+            ByteBuffer writeBuffer = ByteBuffer.allocate(byteOutputStream.getCount());
+            writeBuffer.put(byteOutputStream.getBytes(), 0, byteOutputStream.getCount());
+            writeBuffer.flip();
+            channel.write(writeBuffer, writeBuffer, new WriteCompletionHandler(channel));
+        }, 100, 100, TimeUnit.MILLISECONDS);
     }
 
     @Override
