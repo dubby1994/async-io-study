@@ -22,7 +22,7 @@ public class TimeClient {
                     new CompletionHandler<Void, Long>() {
                         @Override
                         public void completed(Void result, Long attachment) {
-                            String request = "PING";
+                            String request = "123456789";
                             byte[] bytes = request.getBytes(Charset.defaultCharset());
                             ByteBuffer writeBuffer = ByteBuffer.allocate(bytes.length);
                             writeBuffer.put(bytes);
@@ -46,7 +46,7 @@ public class TimeClient {
 
                                             @Override
                                             public void failed(Throwable exc, ByteBuffer attachment) {
-
+                                                logger.error("failed", exc);
                                             }
                                         });
                                     }
@@ -54,18 +54,18 @@ public class TimeClient {
 
                                 @Override
                                 public void failed(Throwable exc, ByteBuffer attachment) {
-
+                                    logger.error("failed", exc);
                                 }
                             });
                         }
 
                         @Override
                         public void failed(Throwable exc, Long attachment) {
-
+                            logger.error("failed", exc);
                         }
                     });
 
-            Thread.sleep(100);
+            new CountDownLatch(1).await();
         } catch (Exception e) {
             e.printStackTrace();
         }

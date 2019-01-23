@@ -16,7 +16,7 @@ public class AcceptCompletionHandler implements CompletionHandler<AsynchronousSo
     public void completed(AsynchronousSocketChannel result, AsynchronousServerSocketChannel attachment) {
         attachment.accept(attachment, this);
 
-        ByteBuffer buffer = ByteBuffer.allocate(1024);
+        ByteBuffer buffer = ByteBuffer.allocate(1);
         result.read(buffer, buffer, new ReadCompletionHandler(result));
     }
 

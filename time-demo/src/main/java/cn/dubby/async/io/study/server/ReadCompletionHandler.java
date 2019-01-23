@@ -28,6 +28,9 @@ public class ReadCompletionHandler implements CompletionHandler<Integer, ByteBuf
         logger.info("request {}", request);
         String currentTime = new Date().toString();
         doWrite(currentTime);
+
+        byteBuffer.clear();
+        channel.read(byteBuffer, byteBuffer, this);
     }
 
     @Override
