@@ -11,7 +11,6 @@
     <modules>
         <module>server</module>
         <module>client</module>
-        <module>time-demo</module>
         <module>core</module>
     </modules>
 
